@@ -1,0 +1,9 @@
+{
+  "workbench.colorCustomizations": {
+    "[Cobalt2]": {
+      "titleBar.activeBackground": "#2003c2",
+      "titleBar.inactiveBackground": "#e621bb"
+    }
+  },
+  "prettier.jsxSingleQuote": true
+}
