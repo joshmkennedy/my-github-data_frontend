@@ -6,15 +6,23 @@ import Sidebar from "../components/Sidebar";
 import LineGraph from "../components/LineGraph";
 import BarGraph from "../components/BarGraph";
 
-const index = ({ data: { fromGitHub, user } }) => {
+const index = ({
+  data: {
+    allRepoCommits,
+    EachTotalCommits,
+    eachBiggestCommitWeek,
+    EachAverageCommitCount,
+    user,
+  },
+}) => {
   return (
     <div>
       <div className='main-section'>
         <div>
           <h2>All {user}'s commits by week</h2>
           <LineGraph
-            data={fromGitHub.map(({ total }) => total)}
-            xLabels={fromGitHub.map(({ week }) => week)}
+            data={allRepoCommits.map(({ total }) => total)}
+            xLabels={allRepoCommits.map(({ week }) => week)}
           />
         </div>
       </div>
@@ -23,36 +31,36 @@ const index = ({ data: { fromGitHub, user } }) => {
         <SubSection>
           <li className='sub__graph'>
             <div>
-              <h3>longest streak of commits</h3>
+              <h3>Average Commits in a Week</h3>
               <BarGraph
-                dataset={fromGitHub.map(({ total }) => total)}
-                yLabels={fromGitHub.map(({ total }) => total)}
+                dataset={EachAverageCommitCount.map(
+                  ({ averageCommit }) => averageCommit
+                )}
+                repoName={EachAverageCommitCount.map(
+                  ({ repoName }) => repoName
+                )}
               />
             </div>
           </li>
           <li className='sub__graph'>
             <div>
               <h3>most lines of code commited at once</h3>
-              <BarGraph dataset={fromGitHub.map(({ total }) => total)} />
+              <BarGraph
+                dataset={eachBiggestCommitWeek.map(
+                  ({ biggestCommit: { total } }) => total
+                )}
+                repoName={eachBiggestCommitWeek.map(({ repoName }) => repoName)}
+              />
             </div>
           </li>
           <li className='sub__graph'>
             <div>
               <h3>Repositories total commits</h3>
-              <BarGraph dataset={fromGitHub.map(({ total }) => total)} />
-            </div>
-          </li>
-        </SubSection>
-      </div>
-      <div>
-        <h2>Repository Commits by Week</h2>
-        <SubSection>
-          <li>
-            <div>
-              <h3>Repository Name</h3>
-              <LineGraph
-                data={fromGitHub.map(({ total }) => total)}
-                xLabels={fromGitHub.map(({ week }) => week)}
+              <BarGraph
+                dataset={EachTotalCommits.map(
+                  ({ totalCommits }) => totalCommits
+                )}
+                repoName={EachTotalCommits.map(({ repoName }) => repoName)}
               />
             </div>
           </li>

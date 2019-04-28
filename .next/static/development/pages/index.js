@@ -22,7 +22,8 @@ var _jsxFileName = "/Users/joshkennedy/sites/joshs/github-data-01/frontend/compo
 
 var BarGraph = function BarGraph(_ref) {
   var className = _ref.className,
-      dataset = _ref.dataset;
+      dataset = _ref.dataset,
+      repoName = _ref.repoName;
   var viewBox = {
     w: 400,
     h: 200
@@ -75,8 +76,16 @@ var BarGraph = function BarGraph(_ref) {
     __self: this
   })), dataset.map(function (data, index) {
     var barWidth = Math.floor(data / barMax * w);
-    var barY = Math.floor(h / dataset.length * index); //const text = { tX, tY, dY, repoTitle };
-
+    var barY = Math.floor(h / dataset.length * index);
+    var tX = 40;
+    var tY = barY + 40;
+    var dY = 0;
+    var name = {
+      tX: tX,
+      tY: tY,
+      dY: dY,
+      repoName: repoName[index]
+    };
     var rect = {
       barHeight: barHeight,
       barWidth: barWidth,
@@ -84,14 +93,14 @@ var BarGraph = function BarGraph(_ref) {
     };
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_graphComponents_Bar__WEBPACK_IMPORTED_MODULE_3__["default"], {
       key: index,
-      className: "bar"
-      /* text={text} */
-      ,
+      className: "bar",
+      name: name,
+      data: data,
       rect: rect,
       viewBox: viewBox,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 34
+        lineNumber: 38
       },
       __self: this
     });
@@ -285,15 +294,19 @@ var _jsxFileName = "/Users/joshkennedy/sites/joshs/github-data-01/frontend/graph
 
 
 var Bar = function Bar(_ref) {
-  var text = _ref.text,
+  var name = _ref.name,
       rect = _ref.rect,
-      viewBox = _ref.viewBox;
+      viewBox = _ref.viewBox,
+      data = _ref.data;
   var w = viewBox.w,
       h = viewBox.h;
   var barHeight = rect.barHeight,
       barWidth = rect.barWidth,
       barY = rect.barY;
-  /* const { tX, tY, dY, repoTitle } = text; */
+  var tX = name.tX,
+      tY = name.tY,
+      dY = name.dY,
+      repoName = name.repoName;
 
   var neverZero = function neverZero(num, multiplier) {
     return num !== 0 ? num : num + multiplier / 100;
@@ -308,7 +321,7 @@ var Bar = function Bar(_ref) {
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("rect", {
     width: width,
-    height: barHeight,
+    height: Math.floor(barHeight - barHeight * 0.4),
     y: barY,
     fill: "grey",
     __source: {
@@ -316,7 +329,25 @@ var Bar = function Bar(_ref) {
       lineNumber: 13
     },
     __self: this
-  }));
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+    x: tX,
+    y: tY,
+    dy: dY,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 19
+    },
+    __self: this
+  }, repoName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+    x: barWidth - 50,
+    y: tY,
+    dy: dY,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 22
+    },
+    __self: this
+  }, data));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Bar);
@@ -14188,48 +14219,25 @@ var _jsxFileName = "/Users/joshkennedy/sites/joshs/github-data-01/frontend/pages
 
 var index = function index(_ref) {
   var _ref$data = _ref.data,
-      fromGitHub = _ref$data.fromGitHub,
+      allRepoCommits = _ref$data.allRepoCommits,
+      EachTotalCommits = _ref$data.EachTotalCommits,
+      eachBiggestCommitWeek = _ref$data.eachBiggestCommitWeek,
+      EachAverageCommitCount = _ref$data.EachAverageCommitCount,
       user = _ref$data.user;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11
+      lineNumber: 19
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "main-section",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 12
+      lineNumber: 20
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 13
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14
-    },
-    __self: this
-  }, "All ", user, "'s commits by week"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_LineGraph__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    data: fromGitHub.map(function (_ref2) {
-      var total = _ref2.total;
-      return total;
-    }),
-    xLabels: fromGitHub.map(function (_ref3) {
-      var week = _ref3.week;
-      return week;
-    }),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 15
-    },
-    __self: this
-  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 21
@@ -14241,151 +14249,135 @@ var index = function index(_ref) {
       lineNumber: 22
     },
     __self: this
-  }, "Comparing Repositories"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SubSection, {
+  }, "All ", user, "'s commits by week"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_LineGraph__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    data: allRepoCommits.map(function (_ref2) {
+      var total = _ref2.total;
+      return total;
+    }),
+    xLabels: allRepoCommits.map(function (_ref3) {
+      var week = _ref3.week;
+      return week;
+    }),
     __source: {
       fileName: _jsxFileName,
       lineNumber: 23
     },
     __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "sub__graph",
+  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 24
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 25
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 26
-    },
-    __self: this
-  }, "longest streak of commits"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_BarGraph__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    dataset: fromGitHub.map(function (_ref4) {
-      var total = _ref4.total;
-      return total;
-    }),
-    yLabels: fromGitHub.map(function (_ref5) {
-      var total = _ref5.total;
-      return total;
-    }),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 27
-    },
-    __self: this
-  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "sub__graph",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 33
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 34
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 35
-    },
-    __self: this
-  }, "most lines of code commited at once"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_BarGraph__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    dataset: fromGitHub.map(function (_ref6) {
-      var total = _ref6.total;
-      return total;
-    }),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 36
-    },
-    __self: this
-  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-    className: "sub__graph",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 39
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 40
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 41
-    },
-    __self: this
-  }, "Repositories total commits"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_BarGraph__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    dataset: fromGitHub.map(function (_ref7) {
-      var total = _ref7.total;
-      return total;
-    }),
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 42
-    },
-    __self: this
-  }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 47
+      lineNumber: 29
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 48
+      lineNumber: 30
     },
     __self: this
-  }, "Repository Commits by Week"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SubSection, {
+  }, "Comparing Repositories"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SubSection, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 49
+      lineNumber: 31
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+    className: "sub__graph",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 50
+      lineNumber: 32
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 51
+      lineNumber: 33
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 52
+      lineNumber: 34
     },
     __self: this
-  }, "Repository Name"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_LineGraph__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    data: fromGitHub.map(function (_ref8) {
-      var total = _ref8.total;
-      return total;
+  }, "Average Commits in a Week"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_BarGraph__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    dataset: EachAverageCommitCount.map(function (_ref4) {
+      var averageCommit = _ref4.averageCommit;
+      return averageCommit;
     }),
-    xLabels: fromGitHub.map(function (_ref9) {
-      var week = _ref9.week;
-      return week;
+    repoName: EachAverageCommitCount.map(function (_ref5) {
+      var repoName = _ref5.repoName;
+      return repoName;
     }),
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 53
+      lineNumber: 35
+    },
+    __self: this
+  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+    className: "sub__graph",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 45
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 46
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 47
+    },
+    __self: this
+  }, "most lines of code commited at once"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_BarGraph__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    dataset: eachBiggestCommitWeek.map(function (_ref6) {
+      var total = _ref6.biggestCommit.total;
+      return total;
+    }),
+    repoName: eachBiggestCommitWeek.map(function (_ref7) {
+      var repoName = _ref7.repoName;
+      return repoName;
+    }),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 48
+    },
+    __self: this
+  }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+    className: "sub__graph",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 56
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 57
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 58
+    },
+    __self: this
+  }, "Repositories total commits"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_BarGraph__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    dataset: EachTotalCommits.map(function (_ref8) {
+      var totalCommits = _ref8.totalCommits;
+      return totalCommits;
+    }),
+    repoName: EachTotalCommits.map(function (_ref9) {
+      var repoName = _ref9.repoName;
+      return repoName;
+    }),
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 59
     },
     __self: this
   }))))));

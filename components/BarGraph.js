@@ -4,7 +4,7 @@ import styled from "styled-components";
 import maxValue from "../helperFunctions/maxValue";
 import Bar from "../graphComponents/Bar";
 
-const BarGraph = ({ className, dataset }) => {
+const BarGraph = ({ className, dataset, repoName }) => {
   const viewBox = {
     w: 400,
     h: 200,
@@ -27,14 +27,20 @@ const BarGraph = ({ className, dataset }) => {
         const barWidth = Math.floor((data / barMax) * w);
 
         const barY = Math.floor((h / dataset.length) * index);
-        //const text = { tX, tY, dY, repoTitle };
+        const tX = 40;
+        const tY = barY + 40;
+        const dY = 0;
+
+        const name = { tX, tY, dY, repoName: repoName[index] };
         const rect = { barHeight, barWidth, barY };
 
         return (
           <Bar
             key={index}
             className='bar'
-            /* text={text} */ rect={rect}
+            name={name}
+            data={data}
+            rect={rect}
             viewBox={viewBox}
           />
         );
